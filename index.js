@@ -7,14 +7,23 @@ let output = '';
 
 json.lists.forEach(list => {
   const id = list.id;
-  output += `## ${list.name}\n\n`;
   const cards = getCardsFromListId(id);
+  let listOutput = '';
+  let anyCardsOpen = false;
   cards.forEach(card => {
     if(card.closed) return;
-    output += `* [${card.name}](${card.shortUrl})\n`;
+    anyCardsOpen = true;
+    let tagsText = '';
+    card.labels.forEach(label => {
+      tagsText = `${tagsText}[${label.name}]`;
+    });
+    listOutput += `* ${tagsText}[${card.name}](${card.shortUrl})\n`;
     if(card.shortUrl === 'https://trello.com/c/nm4me3A7') {
     }
   });
+  if(!cards.length || !anyCardsOpen) return;
+  output += `## ${list.name}\n\n${listOutput}`;
+
   output += `\n`;
 });
 
